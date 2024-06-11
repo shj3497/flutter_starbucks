@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starbucks/models/api/news_model.dart';
+import 'package:flutter_starbucks/generated-code/lib/api.dart';
 
 class NewsListWidget extends StatelessWidget {
-  final List<NewsModel> data;
+  final List<NewsEntity> data;
 
   const NewsListWidget({super.key, required this.data});
 
@@ -32,7 +32,7 @@ class NewsListWidget extends StatelessWidget {
 }
 
 class NewsItem extends StatelessWidget {
-  final NewsModel news;
+  final NewsEntity news;
   const NewsItem({super.key, required this.news});
 
   @override

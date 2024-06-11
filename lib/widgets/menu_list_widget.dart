@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_starbucks/models/view/menu_item_model.dart';
+import 'package:flutter_starbucks/models/menu_item_model.dart';
 import 'package:go_router/go_router.dart';
 
 class MenuList extends StatelessWidget {

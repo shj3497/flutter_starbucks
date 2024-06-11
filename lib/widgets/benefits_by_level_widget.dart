@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starbucks/models/api/benefit_model.dart';
+import 'package:flutter_starbucks/generated-code/lib/api.dart';
 import 'package:flutter_starbucks/services/benefit_service.dart';
 
 class BenefitsByLevelWidget extends StatefulWidget {
@@ -10,35 +10,35 @@ class BenefitsByLevelWidget extends StatefulWidget {
 }
 
 class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
-  Rank currentRank = Rank.WELCOME;
-  late Future<List<BenefitModel>> allBenefit;
+  MembershipBenefitRankEnum currentRank = MembershipBenefitRankEnum.WELCOME;
+
+  late Future<PaginatedBenefit?> allBenefit;
   @override
   void initState() {
     super.initState();
-    allBenefit = BenefitService().getBenefits();
+    allBenefit = BenefitService().benefits();
   }
 
-  List<BenefitModel> filteredBenefit(
-    List<BenefitModel> allBenefit,
-    Rank selectedRank,
+  List<BenefitEntity> filteredBenefit(
+    List<BenefitEntity> allBenefit,
+    MembershipBenefitRankEnum selectedRank,
   ) {
     var filteredData = allBenefit.where((item) {
       var memberships = item.membership;
-      return memberships
-          .any((membership) => membership.rank.name == selectedRank.name);
+      return memberships.any((membership) => membership.rank == selectedRank);
     }).toList();
     filteredData
         .sort((a, b) => a.membership.length.compareTo(b.membership.length));
     return filteredData;
   }
 
-  void handleChange(Rank rank) {
+  void handleChange(MembershipBenefitRankEnum rank) {
     setState(() {
       currentRank = rank;
     });
   }
 
-  onShowDetail(BuildContext context, BenefitModel benefit) {
+  onShowDetail(BuildContext context, BenefitEntity benefit) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -123,9 +123,9 @@ class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
     );
   }
 
-  Widget tabButton({required Rank rank}) {
+  Widget tabButton({required MembershipBenefitRankEnum rank}) {
     var name =
-        rank.name[0].toUpperCase() + rank.name.substring(1).toLowerCase();
+        rank.value[0].toUpperCase() + rank.value.substring(1).toLowerCase();
 
     return TextButton(
       onPressed: () {
@@ -154,11 +154,11 @@ class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
     );
   }
 
-  Widget rankLabel({required Rank rank}) {
+  Widget rankLabel({required MembershipBenefitRankEnum rank}) {
     Color labelColor;
-    if (rank == Rank.GOLD) {
+    if (rank == MembershipBenefitRankEnum.GOLD) {
       labelColor = const Color(0xFFC9B57C);
-    } else if (rank == Rank.GREEN) {
+    } else if (rank == MembershipBenefitRankEnum.GREEN) {
       labelColor = const Color(0xFF00B375);
     } else {
       labelColor = const Color(0xFFAEAEAE);
@@ -174,7 +174,7 @@ class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
       margin: const EdgeInsets.only(right: 4),
       child: Text(
-        rank.name,
+        rank.value,
         style: const TextStyle(
           color: Colors.white,
           fontSize: 9,
@@ -193,7 +193,7 @@ class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
           offset: const Offset(-4, 0),
           child: Row(
             children: [
-              tabButton(rank: Rank.WELCOME),
+              tabButton(rank: MembershipBenefitRankEnum.WELCOME),
               const SizedBox(
                 width: 1,
                 height: 14,
@@ -206,7 +206,7 @@ class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
                 height: 14,
                 margin: const EdgeInsets.symmetric(horizontal: 4),
               ),
-              tabButton(rank: Rank.GREEN),
+              tabButton(rank: MembershipBenefitRankEnum.GREEN),
               Container(
                 decoration: const BoxDecoration(
                   color: Color(0xFFAEAEAE),
@@ -215,7 +215,7 @@ class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
                 height: 14,
                 margin: const EdgeInsets.symmetric(horizontal: 4),
               ),
-              tabButton(rank: Rank.GOLD),
+              tabButton(rank: MembershipBenefitRankEnum.GOLD),
             ],
           ),
         ),
@@ -234,9 +234,10 @@ class _BenefitsByLevelWidgetState extends State<BenefitsByLevelWidget> {
                 ),
               );
             }
+            var benefits = snapshot.data!.nodes;
             return Column(
               children: [
-                for (var item in filteredBenefit(snapshot.data!, currentRank))
+                for (var item in filteredBenefit(benefits, currentRank))
                   GestureDetector(
                     onTap: () => onShowDetail(context, item),
                     child: Container(

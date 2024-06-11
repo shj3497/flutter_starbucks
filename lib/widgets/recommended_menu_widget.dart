@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starbucks/models/api/beverage_model.dart';
-import 'package:flutter_starbucks/models/view/menu_item_model.dart';
+import 'package:flutter_starbucks/generated-code/lib/api.dart';
+import 'package:flutter_starbucks/models/menu_item_model.dart';
 import 'package:flutter_starbucks/services/beverage_service.dart';
 import 'package:flutter_starbucks/widgets/menu_list_widget.dart';
 
@@ -12,13 +12,12 @@ class RecommendedMenu extends StatefulWidget {
 }
 
 class _RecommendedMenuState extends State<RecommendedMenu> {
-  late Future<List<BeverageModel>> beverages;
+  late Future<PaginatedBeverage?> beverages;
+
   @override
   void initState() {
     super.initState();
-    setState(() {
-      beverages = BeverageService.getBeverages();
-    });
+    beverages = BeverageService().beverages();
   }
 
   @override
@@ -50,10 +49,20 @@ class _RecommendedMenuState extends State<RecommendedMenu> {
             future: beverages,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const Text('...');
+                return const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Color(0xFF1b3c35),
+                    ),
+                  ),
+                );
               }
+
               List<MenuItemModel> data = [];
-              for (var item in snapshot.data!) {
+              for (var item in snapshot.data!.nodes) {
                 data.add(MenuItemModel(
                   id: item.id,
                   name: item.name,

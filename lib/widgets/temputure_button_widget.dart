@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starbucks/models/api/menu_model.dart';
+import 'package:flutter_starbucks/generated-code/lib/api.dart';
 import 'package:flutter_starbucks/widgets/hot_iced_select_button_widget.dart';
 import 'package:flutter_starbucks/widgets/only_hot_button_widget.dart';
 import 'package:flutter_starbucks/widgets/only_iced_button_widget.dart';
@@ -31,7 +31,7 @@ class TemputureButton extends StatelessWidget {
             "imgUrl": options![0].imgUrl,
             "tagId": options![0].imgUrl,
             "beverageId": options![0].id,
-            "foodId": options![0].id,
+            "foodId": null,
             "title": options![0].name
           });
         },
@@ -40,7 +40,7 @@ class TemputureButton extends StatelessWidget {
             "imgUrl": options![1].imgUrl,
             "tagId": options![1].imgUrl,
             "beverageId": options![1].id,
-            "foodId": options![1].id,
+            "foodId": null,
             "title": options![1].name
           });
         },

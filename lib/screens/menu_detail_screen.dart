@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starbucks/models/api/menu_model.dart';
+import 'package:flutter_starbucks/generated-code/lib/api.dart';
 import 'package:flutter_starbucks/services/menu_service.dart';
 import 'package:flutter_starbucks/widgets/temputure_button_widget.dart';
 
@@ -12,7 +12,8 @@ class MenuDetailScreen extends StatelessWidget {
   final String? title;
   static int appBarHeight = 115;
 
-  final Future<MenuModel> menuDetail;
+  final Future<CommonMenu?> menuDetail;
+
   MenuDetailScreen({
     super.key,
     required this.menuId,
@@ -21,8 +22,8 @@ class MenuDetailScreen extends StatelessWidget {
     this.beverageId,
     this.foodId,
     this.title,
-  }) : menuDetail = MenuService.getMenu(
-          menuId: menuId,
+  }) : menuDetail = MenuService().menu(
+          menuId,
           beverageId: beverageId,
           foodId: foodId,
         );
@@ -99,8 +100,9 @@ class MenuDetailScreen extends StatelessWidget {
                             ),
                           );
                         }
-                        var data = snapshot.data!.beverages![0];
-                        var options = snapshot.data!.menuOptions;
+
+                        var data = snapshot.data!.data.beverages[0];
+                        var options = snapshot.data!.data.menuOptions;
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +117,7 @@ class MenuDetailScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              data.nameEN,
+                              data.nameEn ?? '',
                               style: const TextStyle(
                                 color: Color(0xFFAEAEAE),
                                 fontSize: 13.5,

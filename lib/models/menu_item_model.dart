@@ -1,10 +1,10 @@
 class MenuItemModel {
-  final int id;
+  final num id;
   final String imgUrl;
   final String name;
-  final int menuId;
-  final int? beverageId;
-  final int? foodId;
+  final num menuId;
+  final num? beverageId;
+  final num? foodId;
 
   MenuItemModel({
     required this.id,

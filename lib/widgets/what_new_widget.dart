@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starbucks/models/api/news_model.dart';
+import 'package:flutter_starbucks/generated-code/lib/api.dart';
 import 'package:flutter_starbucks/services/news_service.dart';
 import 'package:flutter_starbucks/widgets/news_list_widget.dart';
 
@@ -11,15 +11,13 @@ class WhatsNewWidget extends StatefulWidget {
 }
 
 class _WhatsNewWidgetState extends State<WhatsNewWidget> {
-  late Future<List<NewsModel>> news;
+  late Future<PaginatedNews?> news;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      news = NewsService.getNews(isHomeList: true, pageSize: 12);
-    });
+    news = NewsService().news(isHomeList: true, pageSize: 12);
   }
 
   @override
@@ -78,7 +76,8 @@ class _WhatsNewWidgetState extends State<WhatsNewWidget> {
                   ),
                 );
               }
-              return NewsListWidget(data: snapshot.data!);
+              var data = snapshot.data!.nodes;
+              return NewsListWidget(data: data);
             },
           )
         ],
